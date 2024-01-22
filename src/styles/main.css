@@ -1,0 +1,36 @@
+h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btns{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    flex-direction: column;
+}
+
+button{
+    background-color: rgb(137, 207, 240);
+    height: 25px;
+}
+
+#printedUsers{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    justify-items: center;
+}
+
+.userCard{
+    margin-bottom: 25px;
+    border-color: aquamarine;
+    border-style: solid;
+    background-color: rgb(137, 207, 240);
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
