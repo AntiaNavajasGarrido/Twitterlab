@@ -1,5 +1,10 @@
 'use strict';
 
+let users =[]; //DECLARO ESTA VARIABLE PARA QUE ESTÉ ACCESIBLE EN TODAS MIS FUNCIONES. SI NO, NO FUNCIONA EL JS
+
+document.getElementById("saveData").addEventListener('click', handleSaveData); // AÑADO UN EVENTO CLICK AL BOTÓN DE GUARDAR DATOS
+document.getElementById("recoverData").addEventListener('click', handleRecoverData); //AÑADO UN EVENTO CLICK AL BOTÓN DE RECUPERAR DATOS
+
 //FUNCION PARA OBTENER DATOS DE LA API
 
 //LA HACEMOS ASÍNCRONA (ASYNC/AWAIT) PARA QUE CARGUE TODO A LA VEZ EN LA WEB Y SEA MÁS FLUIDA
@@ -23,7 +28,7 @@ async function getUsers(){
 //USAMOS EL ARRAY USERS PARA REALIZAR UN BUCLE QUE POR CADA USER PINTE EN LA WEB NOMBRE, CIUDAD, FOTO Y NOMBRE DE USUARIO
 function showUsers(users){
     const printedUsers = document.getElementById('printedUsers'); //USAMOS GETELEMENTBY PARA SELECCIONAR EL BLOQUE DE HTML QUE QUEREMOS MODIFICAR CON JS//USAMOS GETELEMENTBY PARA SELECCIONAR EL BLOQUE DE HTML QUE QUEREMOS MODIFICAR CON JS
-    
+    printedUsers.innerHTML = '';
     users.forEach(user => {
         const userInHTML = `
         <section class="userCard" data-userid="${user.login.uuid}">
@@ -43,9 +48,11 @@ function showUsers(users){
     });
 }
 
+//FUNCIÓN PARA REVISAR SI EL USUARIO HA SIDO CLICKADO Y, SI LO HA SIDO, MARCARLO COMO "FRIEND" Y CAMBIARLO DE BACKGROUND-COLOR
+
 function friendStatus(card, users) {
-    const userId = card.dataset.userid;
-    const user = users.find(u => u.login.uuid === userId);
+    const userId = card.dataset.userid; //CON .DATASET CAMBIO EL ATRIBUTO ID A DATA PARA PODER MANEJARLO MÁS FÁCILMENTE
+    const user = users.find(user => user.login.uuid === userId);
 
     if (user) {
         user.isFriend = !user.isFriend; // CAMBIAMOS EL ESTADO DEL USUARIO AL CLICKAR
@@ -53,10 +60,52 @@ function friendStatus(card, users) {
     }
 }
 
+//EVENTO PARA CARGAR LA FUNCIÓN "GETUSERS" EN CUANTO SE ABRE LA VENTANA DE LA APLICACIÓN
+
 window.addEventListener('load', (event)=>{
     event.preventDefault();
     getUsers();
+
+    //MODIFICO ESTE EVENTO PARA QUE SE QUEDEN LOS DATOS DEL LOCALSTORAGE AL CARGAR LA PÁGINA
+    
+    async function inicio(){
+        const savedUsers = JSON.parse(localStorage.getItem("savedUsers"));
+        if (savedUsers !== null) {
+            users = savedUsers;
+        }
+        else {
+            await fetch()
+
+            users = await response.json();
+
+            localStorage.setItem("savedUsers", JSON.stringify(users));
+        }
+    }
+
+    window.addEventListener('load', inicio);
 });
+
+//CREO UNA FUNCIÓN PARA GUARDAR LOS AMIGOS EN EL LOCALSTORAGE
+
+function handleSaveData() {
+    const usersToSave = users.filter(user => user.isFriend);
+    localStorage.setItem("savedUsers", JSON.stringify(usersToSave));
+    alert('Los amigos se han guardado correctamente en el localStorage.'); //AÑADO ESTA LÍNEA PARA VER SI SE HAN AÑADIDO CORRECTAMENTE
+}
+
+//CREO UNA FUNCIÓN PARA PINTAR LOS DATOS GUARDADOS CON LA FUNCIÓN ANTERIOR
+
+function handleRecoverData() {
+    const savedUsers = JSON.parse(localStorage.getItem("savedUsers"));
+    if (savedUsers !== null) {
+        users = savedUsers;
+        showUsers(users);
+        alert('Aquí están tus amigos guardados en la sesión anterior');
+    } else {
+        alert('No hay datos guardados en el localStorage.'); //USO LOS ALERT PARA SABER SI SE HAN MOSTRADO CORRECTAMENTE O NO
+    }
+}
+
 
 
 /*
