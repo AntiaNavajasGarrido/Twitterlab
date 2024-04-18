@@ -4,9 +4,8 @@ TwitterLab is a web application that utilizes JavaScript, CSS, HTML, and localSt
 ## Features
 - Upon page load, a list of people with their Twitter handle, name, and profile picture is displayed, fetched from an API.
 - Clicking on each user changes its color to indicate that it has been selected.
-- Contains two buttons:
--- Save Data: Allows saving the selected users as friends in the localStorage.
--- Retrieve Data: Displays the already saved friends from the localStorage.
+- Save Data: Allows saving the selected users as friends in the localStorage.
+- Retrieve Data: Displays the already saved friends from the localStorage.
 
 ## Technologies Used
 - JavaScript
